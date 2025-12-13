@@ -1,0 +1,11 @@
+# # # # # # # # # # # # # # # # # # # # #
+# # Extra
+.session
+# TODO Add the years as I solve them.
+2022/
+2023/
+2024/
+2022/*/*.txt
+2023/*/*.txt
+2024/*/*.txt
+2025/*/*.txt
