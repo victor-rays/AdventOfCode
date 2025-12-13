@@ -9,17 +9,20 @@ function main {
         exit 1
     }
     local YEAR
-    local DAY
+    local DAYS
+    local CREATE_SOLUTION_FILE
     [[ "$#" -ne 0 ]] && {
         YEAR="$1"
-        DAY=25
+        DAYS="$2"
+        CREATE_SOLUTION_FILE="$3"
     } || {
         YEAR="$(date +%Y)"
-        DAY="$(date +%d)"
+        DAYS="$(date +%d)"
+        CREATE_SOLUTION_FILE=0
     }
     local MONTH="$(date +%m)"
     # In 2025 it was only 12 days of puzzles.
-    [[ "$YEAR" -eq 2025 && "$DAY" -gt 12 ]] && {
+    [[ "$YEAR" -eq 2025 && "$DAYS" -gt 12 ]] && {
         DAY=12
     }
     local URL="https://adventofcode.com/$YEAR/day"
@@ -31,7 +34,7 @@ function main {
 # Author § Victor-ray, S. <git@zendai.net.eu.org>
 
 function main {
-    local -r INPUT_FILE=input.txt
+    local -r input_file=input.txt
     
 }
 
@@ -44,7 +47,7 @@ EOF
     local PUZZLE INPUT TITLE
     mkdir -p "$SCRIPT_DIR/$YEAR"
     [[ ("$MONTH" = 12) ]] && {
-        for day in $(seq 1 "$DAY")
+        for day in $(seq 1 "$DAYS")
         do
             mkdir -vp "$SCRIPT_DIR/$YEAR/$day"
             echo "Day $day."
@@ -58,7 +61,8 @@ EOF
                 echo "Fetching puzzle input."
                 curl -sL -b "$SESSION_COOKIE" "$URL/$day"/input > "$SCRIPT_DIR/$YEAR/$day/input.txt"
             }
-            [[ ! -f "$SCRIPT_DIR/$YEAR/$day/solution.$FILETYPE" ]] && {
+            [[ ! -f "$SCRIPT_DIR/$YEAR/$day/solution.$FILETYPE" ]] && \
+            (("$CREATE_SOLUTION_FILE" = 1)) && {
                 echo "Creating solution file."
                 printf '%s\n' "$SOLUTION_FILE_TEMPLATE" > "$SCRIPT_DIR/$YEAR/$day/solution.$FILETYPE"
             }
