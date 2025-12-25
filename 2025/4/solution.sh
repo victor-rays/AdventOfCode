@@ -131,24 +131,15 @@ function get_positions {
             }
         done
     done
-    [[ "${#can_remove[@]}" -ne 0 ]] && {
-        #echo "Can be removed: ${can_remove[@]}"
-        echo "Removing: ${#can_remove[@]}"
-    }
 }
 
 function remove_paper_rolls {
     [[ "${#can_remove[@]}" -gt 0 ]] && {
         ((total_removed+="${#can_remove[@]}"))
+        echo "Removing: ${#can_remove[@]}"
         for r in "${can_remove[@]}"; do
             grid["$r"]="."
         done
-        #for ((x = 0; x < "$x_len"; x++)); do
-        #    for ((y = 0; y < "$y_len"; y++)); do
-        #        echo -n "${grid[($x,$y)]}"
-        #    done
-        #    echo ""
-        #done
     }
 }
 
@@ -165,7 +156,6 @@ function part_one {
             y_pos="$c"
             current="${data[$i]:$c:1}"
             [[ "$current" == "@" ]] && {
-                echo "Paper roll at: ($x_pos,$y_pos)"
                 count=0
                 [[ "$x_pos" -eq 0 ]] && {
                     [[ "$y_pos" -eq 0 ]] && {
@@ -188,7 +178,6 @@ function part_one {
                             fi
                         }
                     }
-                    
                     [[ "$y_pos" -gt 0 ]] && {
                         for h in -1 1; do
                             new_y=$((y_pos + h))
@@ -199,8 +188,7 @@ function part_one {
                             else
                                 echo "($x_pos,$new_y) $to_check"
                             fi
-                        done
-                        
+                        done       
                         new_x=$((x_pos+1))
                         [[ "$new_x" -lt "$len" ]] && {
                             for v in -1 0 1; do
@@ -216,9 +204,7 @@ function part_one {
                         }
                     }
                 }
-                
                 [[ "$x_pos" -gt 0 ]] && {
-                    
                     [[ "$y_pos" -eq 0 ]] && {
                         new_y=$((y_pos+1))
                         for z in -1 0 1; do
@@ -233,7 +219,6 @@ function part_one {
                                         echo "($new_x,$new_y) $to_check"
                                     fi
                                 }
-                                
                                 [[ "$z" -ne 0 ]] && {
                                     to_check="${data[$new_x]:$y_pos:1}"
                                     if [[ "$to_check" == "@" ]]; then
@@ -241,8 +226,7 @@ function part_one {
                                         ((count+=1))
                                     else
                                         echo "($new_x,$y_pos) $to_check"
-                                    fi
-                                    
+                                    fi   
                                     to_check="${data[$new_x]:$new_y:1}"
                                     if [[ "$to_check" == "@" ]]; then
                                         echo "($new_x,$new_y) $to_check Paper roll"
@@ -250,12 +234,10 @@ function part_one {
                                     else
                                         echo "($new_x,$new_y) $to_check"
                                     fi
-                                }
-                            
+                                }       
                             }  
                         done
                     }
-                    
                     [[ "$y_pos" -gt 0 ]] && {
                         for q in -1 0 1; do
                             new_x=$((x_pos+q))
@@ -272,19 +254,16 @@ function part_one {
                                         fi
                                     done
                                 }
-                                
                                 [[ "$q" -ne 0 ]] && {
                                     for t in -1 0 1; do
                                         new_y=$((y_pos+t))
                                         to_check="${data[$new_x]:$new_y:1}"
-                                        
                                         if [[ "$to_check" == "@" ]]; then
                                             echo "($new_x,$new_y) $to_check Paper roll"
                                             ((count+=1))
                                         else
                                             echo "($new_x,$new_y) $to_check"
                                         fi
-                                        
                                     done
                                 }
                             } # new_x le len
@@ -292,10 +271,8 @@ function part_one {
                     } # y_pos gt 0
                     
                 } # x -gt 0
-                echo "Adjacent rolls: $count"
                 [[ "$count" -lt 4 ]] && {
                     ((part_one+=1))
-                    echo "Position: ($x_pos,$y_pos)"
                 }
             } # current = @
         done
